@@ -2,9 +2,8 @@ package br.com.alura.ecomart.chatbot.infra.openai;
 
 import br.com.alura.ecomart.chatbot.domain.service.LmStudioService;
 import com.theokanning.openai.OpenAiHttpException;
-import com.theokanning.openai.completion.chat.ChatCompletionRequest;
-import com.theokanning.openai.completion.chat.ChatMessage;
-import com.theokanning.openai.completion.chat.ChatMessageRole;
+import com.theokanning.openai.completion.chat.*;
+import io.reactivex.Flowable;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -21,7 +20,7 @@ public class LmStudioClient {
         this.service = new LmStudioService(Duration.ofSeconds(60));
     }
 
-    public String enviarRequisicaoChatCompletion(DadosRequisicaoChatCompletion dados) {
+    public Flowable<ChatCompletionChunk> enviarRequisicaoChatCompletion(DadosRequisicaoChatCompletion dados) {
         var request = ChatCompletionRequest
                 .builder()
                 .model(MODELOS.get(0))
@@ -32,16 +31,14 @@ public class LmStudioClient {
                         new ChatMessage(
                                 ChatMessageRole.USER.value(),
                                 dados.promptUsuario())))
+                .stream(true)
                 .build();
 
         var segundosParaProximaTentiva = 5;
         var tentativas = 0;
         while (tentativas++ != 5) {
             try {
-                return service
-                        .createChatCompletion(request)
-                        .getChoices().get(0)
-                        .getMessage().getContent();
+                return service.streamChatCompletion(request);
             } catch (OpenAiHttpException ex) {
                 var errorCode = ex.statusCode;
                 switch (errorCode) {
