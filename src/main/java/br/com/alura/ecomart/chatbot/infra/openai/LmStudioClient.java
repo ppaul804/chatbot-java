@@ -1,31 +1,30 @@
 package br.com.alura.ecomart.chatbot.infra.openai;
 
+import br.com.alura.ecomart.chatbot.domain.service.LmStudioService;
 import com.theokanning.openai.OpenAiHttpException;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
-import com.theokanning.openai.service.OpenAiService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
-public class OpenAIClient {
+public class LmStudioClient {
+    private static final List<String> MODELOS = Arrays.asList(System.getenv("LM_MODEL_NAME").split(","));
 
-    private final String apiKey;
-    private final OpenAiService service;
+    private final LmStudioService service;
 
-    public OpenAIClient(@Value("${app.openai.api.key}") String apiKey) {
-        this.apiKey = apiKey;
-        this.service = new OpenAiService(apiKey, Duration.ofSeconds(60));
+    public LmStudioClient() {
+        this.service = new LmStudioService(Duration.ofSeconds(60));
     }
 
     public String enviarRequisicaoChatCompletion(DadosRequisicaoChatCompletion dados) {
         var request = ChatCompletionRequest
                 .builder()
-                .model("gpt-4-1106-preview")
+                .model(MODELOS.get(0))
                 .messages(Arrays.asList(
                         new ChatMessage(
                                 ChatMessageRole.SYSTEM.value(),

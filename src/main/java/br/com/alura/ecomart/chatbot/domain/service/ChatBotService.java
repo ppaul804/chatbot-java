@@ -1,15 +1,15 @@
 package br.com.alura.ecomart.chatbot.domain.service;
 
 import br.com.alura.ecomart.chatbot.infra.openai.DadosRequisicaoChatCompletion;
-import br.com.alura.ecomart.chatbot.infra.openai.OpenAIClient;
+import br.com.alura.ecomart.chatbot.infra.openai.LmStudioClient;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ChatBotService {
 
-    private OpenAIClient client;
+    private LmStudioClient client;
 
-    public ChatBotService(OpenAIClient client) {
+    public ChatBotService(LmStudioClient client) {
         this.client = client;
     }
 
