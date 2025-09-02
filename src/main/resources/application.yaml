@@ -7,3 +7,5 @@ app:
   lm-studio:
     url: ${LM_STUDIO_URL}
     model-name: ${LM_MODEL_NAME}
+openai:
+  api-key: ${OPENAI_API_KEY}

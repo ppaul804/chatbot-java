@@ -44,6 +44,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.openai</groupId>
+			<artifactId>openai-java-spring-boot-starter</artifactId>
+			<version>3.1.2</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>com.knuddels</groupId>
 			<artifactId>jtokkit</artifactId>
 			<version>0.6.1</version>
